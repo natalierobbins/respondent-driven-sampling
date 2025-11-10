@@ -41,20 +41,14 @@ export const validateReferralCode = (
 
 // Helper function to initialize survey with or without existing data
 export const initializeSurvey = (
-	locations: any[],
 	surveyByRefCode: any,
 	surveyByObjectId: any,
 	parentSurvey: any,
 	isEditMode: boolean = false
 ) => {
-	const locationChoices = locations.map((location: any) => ({
-		value: location._id,
-		text: location.hubName
-	}));
-
 	const surveyJson = isEditMode
-		? generateEditSurveyJson(locationChoices)
-		: generateSurveyJson(locationChoices);
+		? generateEditSurveyJson()
+		: generateSurveyJson();
 	const survey = new Model(surveyJson);
 
 	// Populate with existing data from objectId if found

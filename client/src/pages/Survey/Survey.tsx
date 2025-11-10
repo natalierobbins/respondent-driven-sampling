@@ -21,7 +21,7 @@ import { useGeolocated } from 'react-geolocated';
 // It uses the useEffect hook to manage side effects, such as fetching data and updating state
 // It uses the useGeolocated hook to get the user's geolocation
 const Survey = () => {
-	const { surveyService, locationService } = useApi();
+	const { surveyService } = useApi();
 	const [searchParams] = useSearchParams();
 	const surveyCodeInUrl = searchParams.get('ref');
 	const { id: surveyObjectIdInUrl } = useParams();
@@ -35,10 +35,6 @@ const Survey = () => {
 
 	// Add a ref to store the original full survey data in edit mode
 	const originalSurveyData = useRef<any>(null);
-
-	// Get locations with loading state
-	const { data: locations, isLoading: locationsLoading } =
-		locationService.useLocations() || {};
 
 	// Conditionally fetch survey by referral code (only when surveyCodeInUrl exists)
 	const { data: surveyByRefCode, isLoading: surveyByRefLoading } =
@@ -175,8 +171,6 @@ const Survey = () => {
 
 	// Check if all required data is loaded
 	const isDataReady =
-		!locationsLoading &&
-		locations &&
 		(!surveyCodeInUrl || !surveyByRefLoading) &&
 		!parentLoading &&
 		!surveyByObjectIdLoading;
@@ -204,7 +198,6 @@ const Survey = () => {
 
 		// Initialize the survey
 		const { survey, existingData } = initializeSurvey(
-			locations,
 			surveyByRefCode,
 			surveyByObjectId,
 			parentSurvey,
@@ -238,7 +231,6 @@ const Survey = () => {
 		surveyByRefCode,
 		surveyByObjectId,
 		parentSurvey,
-		locations,
 		ability
 	]);
 
@@ -259,7 +251,6 @@ const Survey = () => {
 
 	// Loading state (need to fetch all data)
 	const isLoading =
-		locationsLoading ||
 		(surveyCodeInUrl && surveyByRefLoading) ||
 		parentLoading ||
 		surveyByObjectIdLoading;

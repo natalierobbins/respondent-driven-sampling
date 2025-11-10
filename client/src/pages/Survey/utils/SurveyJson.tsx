@@ -1,12 +1,10 @@
-export const generateSurveyJson = (locations: any[]) => {
-	const preScreenPage = generateVolunteerPreScreenPage(locations);
-
+export const generateSurveyJson = () => {
 	return {
 		title: 'Homelessness Experience Survey',
 		showProgressBar: 'top',
 		progressBarType: 'buttons',
 		pages: [
-			preScreenPage,
+			VolunteerPreScreenPage,
 			consentPage,
 			surveyValidationPage,
 			personalLivingSituationPage,
@@ -23,20 +21,17 @@ export const generateSurveyJson = (locations: any[]) => {
 	};
 };
 
-export const generateEditSurveyJson = (locationChoices: any[]) => {
-	const preScreenPage = generateVolunteerPreScreenPage(locationChoices);
-
+export const generateEditSurveyJson = () => {
 	return {
 		title: 'Homelessness Experience Survey (Edit Mode)',
 		showProgressBar: 'top',
 		progressBarType: 'buttons',
-		pages: [preScreenPage, consentPage, surveyValidationPage]
+		pages: [VolunteerPreScreenPage, consentPage, surveyValidationPage]
 	};
 };
 
 // PRE-SCREENING
-const generateVolunteerPreScreenPage = (locationChoices: any[]) => {
-	return {
+const VolunteerPreScreenPage = {
 		name: 'volunteer-pre-screen',
 		title: 'Pre-Screening Questions - Volunteer Only',
 		elements: [
@@ -45,15 +40,19 @@ const generateVolunteerPreScreenPage = (locationChoices: any[]) => {
 				name: 'pre-screen-note',
 				html: '<div><strong>These questions are for volunteers only. Please do not ask the respondent!</strong></div>'
 			},
-			{
-				type: 'dropdown',
-				name: 'location',
-				title: 'Please select location:',
-				choices: locationChoices,
-				isRequired: true
-			}
+		{
+			type: 'dropdown',
+			name: 'location',
+			title: 'Please select location:',
+			choicesByUrl: {
+				url: 'http://localhost:1234/api/v2/locations',
+				path: 'data',
+				valueName: '_id',
+				titleName: 'hubName'
+			},
+			isRequired: true
+		}
 		]
-	};
 };
 
 const sleepingSituationChoices = [
